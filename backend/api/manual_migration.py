@@ -26,6 +26,7 @@ import pandas as pd
 import hashlib
 import glob
 import os
+import csv
 
 
 # if negative, all images are registered in database
@@ -46,8 +47,8 @@ def _checksum(file_path):
 
     return checksum.hexdigest()
 
-
-def _list_images(ds_path, extension=".png"):
+#image type
+def _list_images(ds_path, extension=".JPG"):
     """Lists images in ds_path matching a file extension."""
     dataset_images = glob.glob(os.path.join(ds_path, "*" + extension))
     if MAX_REGISTERED_IMAGES > 0:
@@ -96,13 +97,13 @@ def _extract_csv_to_db(csv_entry, csv_fields, db_fields, csv_db_map=dict()):
 
     return image_fields
 
-
 def import_dataset(apps, schema_editor):
     """
     Import images from the dataset into the database, preprocessing as needed.
     """
 
     # parameters that you might want to change:
+
     CSV_LOCATION = "../metadata.csv"
     DB_FIELDS   = ['user_id', 'sample_id', 'eye', 'lens_type', 'nir_illumination', 'lens_brand', 'is_regular']
     CSV_FIELDS  = ['user_id', 'sample_id', 'eye', 'live_fake', 'NIR_illumination', 'lens_brand', 'regular_irregular_lens_type']
@@ -134,6 +135,13 @@ def import_dataset(apps, schema_editor):
 
     # get list of images and metadata
     dataset_images = _list_images(ds_path=DATASET_ROOT)
+
+    #check if csv file exists
+    if not os.path.exists(os.path.join(DATASET_ROOT, CSV_LOCATION)):
+        with open(os.path.join(DATASET_ROOT, CSV_LOCATION), 'w') as csvfile:
+            writer = csv.writer(csvfile, delimiter=',')
+            writer.writerow(CSV_FIELDS)
+
     df = _load_csv(csv_path=os.path.join(DATASET_ROOT, CSV_LOCATION))
 
     # for each image file, extract metadata and create a database entry
