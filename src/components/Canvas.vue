@@ -107,8 +107,18 @@
                     </button>
                 </div>
                 <!-- <div class="column is-6 is-offset-3"><hr><button class="button is-success" id="btn-save" @click="export_annotation"> <b-icon pack="fas" icon="save">            </b-icon> <span>Export</span>    </button>   </div> -->
+                
+                <!-- text box -->
+                <!-- put at bottom of page with text that says, "if unable to annotate, describe why image is fake" -->
+
+                <div class="annotation-input">
+                    <label for="myInput">If unable to annotate and you believe the image is fake, describe why image is fake: </label>
+                    <input type="text" id="myInput" v-model="textInput">
+                </div>
             </div>
+            
         </div>
+
         <div class="column is-full">
             <div class="columns is-multiline is-centered">
                 <div class="column canvas-container-wrapper">
@@ -127,6 +137,7 @@
                         ref="main-canvas"
                     />
                 </div>
+
                 <div class="column hidden">
                     <canvas
                         class="hidden"
@@ -136,6 +147,38 @@
                 </div>
             </div>
         </div>
+
+        <!-- real and fake buttons -->
+        <div class="column is-centered is-multiline is-1">
+            <div class="button-group">
+                    <button
+                        class="button is-success"
+                        id="btn-real"
+                        @click="real"
+                    >
+                        <b-icon
+                            pack="fas"
+                            icon="check"
+                        ></b-icon>
+                        <span>Real</span>
+                    </button>
+
+                    <!-- fake button -->
+                    <button
+                        class="button is-danger"
+                        id="btn-fake"
+                        @click="fake"
+                    >
+                        <b-icon
+                            pack="fas"
+                            icon="times"
+                        ></b-icon>
+                        <span>Fake</span>
+                    </button>
+            </div>
+        </div>
+
+
     </div>
 </template>
 
@@ -309,6 +352,8 @@ export default {
             if (!this.image) {
                 this.image = new window.Image()
             }
+
+            //forms url for image
             this.canvas_image_source = process.env.VUE_APP_DATASET_ROOT + '/' + this.canvas_image.img_path
             this.image.src = "";
             this.image.src = this.canvas_image_source
@@ -367,8 +412,24 @@ export default {
                 // this.canvas.main_canvas.add(new_item)
 
             })
-
         }
+
+        /*
+        //method for saving text input
+        saveText() {
+            this.textInput = this.textInput;
+        },
+
+        //method for real button
+        real() {
+            this.textInput = "Real";
+        },
+
+        //method for fake button
+        fake() {
+            this.textInput = "Fake";
+        },
+        */
 
     },  // end of 'methods'
     watch: {
@@ -415,6 +476,24 @@ export default {
     margin: 1em;
     bottom: 0;
     right: 0;
+}
+
+/* move real and fake buttons to be side by side */
+.button-group {
+    margin-top: 100px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+/* position/properties of text box */
+.annotation-input {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  background-color: #fff;
+  padding: 10px;
+  border: 1px solid #ccc;
 }
 .canvas-container-wrapper > *,
 .app-canvas,
