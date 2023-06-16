@@ -1,0 +1,9 @@
+6/16:
+    This week I worked on the frontend development by adding buttons to choose whether an image was real or fake. 
+    I also added a textbox for the user to type out what appears fake about the image 
+    when they don't know how to annotate the image. After that, I decided to start working on the dataset import.
+    I realized that the data needs to be in csv format, but most people will bring a collection of images.
+    Since then I have been trying to add a function to the script that creates a csv from the collection of images if 
+    no csv is found. Bringing your own dataset seems a lot more challenging than I thought it would be, and I'm
+    trying to make this more simple for the user. Ideally I would like to have data upload via the website 
+    so that the user doesn't have to deal with anything but this could be less practical as expected. 
