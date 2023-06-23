@@ -7,3 +7,11 @@
     no csv is found. Bringing your own dataset seems a lot more challenging than I thought it would be, and I'm
     trying to make this more simple for the user. Ideally I would like to have data upload via the website 
     so that the user doesn't have to deal with anything but this could be less practical as expected. 
+
+6/23:
+    This week, I searched for a dataset of iris images that includes a metadata.csv file. 
+    I'm currently trying to generalize this because I know not every dataset will have a csv for 
+    metadata. Because of this, I added a function to generate a default metadata.csv file when it's missing. 
+    To extract metadata from the images to put into the csv, I plan to use the Pillow library to access 
+    the embedded EXIF data. This will ensure that even if a metadata.csv file is unavailable, 
+    I can still extract necessary metadata directly from the images.
