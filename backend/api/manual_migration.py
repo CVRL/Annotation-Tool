@@ -26,7 +26,6 @@ import pandas as pd
 import hashlib
 import glob
 import os
-import csv
 
 
 # if negative, all images are registered in database
@@ -48,21 +47,31 @@ def _checksum(file_path):
     return checksum.hexdigest()
 
 #image type
-def _list_images(ds_path, extension=".JPG"):
+def _list_images(ds_path, csv_data, extension=".png"):
     """Lists images in ds_path matching a file extension."""
-    dataset_images = glob.glob(os.path.join(ds_path, "*" + extension))
+    dataset_images = []
+
+    #debug
+    print("csv data", csv_data)
+
+    for number in csv_data['image_id']:
+        img_filename = str(number) + extension
+        img_path = os.path.join(ds_path, img_filename)
+        if os.path.isfile(img_path):
+            dataset_images.append(img_path)
+        else:
+            print("Image not found: {}".format(img_path))
+    
     if MAX_REGISTERED_IMAGES > 0:
         dataset_images = dataset_images[:MAX_REGISTERED_IMAGES]
+
     return dataset_images
 
 
 def _load_csv(csv_path):
     """Returns dataframe given a CSV path."""
-    df = pd.read_csv(csv_path)
-    FILENAME = 'filename'
-    df = df.set_index(FILENAME)
-    df.sort_values(by=[FILENAME])
-
+    df = pd.read_csv(csv_path, header=None, names=['image_id'])
+    return df
 
 def _extract_csv_to_db(csv_entry, csv_fields, db_fields, csv_db_map=dict()):
     """Extracts values from csv entry.
@@ -89,6 +98,8 @@ def _extract_csv_to_db(csv_entry, csv_fields, db_fields, csv_db_map=dict()):
         try:
             value = csv_entry.loc[csv]
         except:
+            #debug
+            #getting error here
             print(csv_entry.head())
             raise
         if csv in csv_db_map:     # translate value
@@ -105,44 +116,27 @@ def import_dataset(apps, schema_editor):
     # parameters that you might want to change:
 
     CSV_LOCATION = "../metadata.csv"
-    DB_FIELDS   = ['user_id', 'sample_id', 'eye', 'lens_type', 'nir_illumination', 'lens_brand', 'is_regular']
-    CSV_FIELDS  = ['user_id', 'sample_id', 'eye', 'live_fake', 'NIR_illumination', 'lens_brand', 'regular_irregular_lens_type']
+    DB_FIELDS   = ['image_id']
+    CSV_FIELDS  = ['image_id']
     CSV_DB_MAP = {        # maps old csv values to new database ones
-        'live_fake': {
-            'live':     'L',
-            'fake':     'F',
-            'clear':    'C',
+        'image_id': {
+            'image_id': 'image_id',
         },
-        'eye': {
-            'left':     'L',
-            'right':    'R',
-        },
-        'NIR_illumination': {
-            'cross':    'C',
-            'direct':   'D',
-        },
-        'regular_irregular_lens_type': {
-            'regular':      True,
-            'irregular':    False,
-            'none':         None,
-            'clear':        None,
-        }
     }
 
     # load other variables
     Image = apps.get_model(DJANGO_APP_NAME, "Image")
     DATASET_ROOT = settings.DATASET_ROOT
 
-    # get list of images and metadata
-    dataset_images = _list_images(ds_path=DATASET_ROOT)
-
-    #check if csv file exists
-    if not os.path.exists(os.path.join(DATASET_ROOT, CSV_LOCATION)):
-        with open(os.path.join(DATASET_ROOT, CSV_LOCATION), 'w') as csvfile:
-            writer = csv.writer(csvfile, delimiter=',')
-            writer.writerow(CSV_FIELDS)
-
+    # load csv file
     df = _load_csv(csv_path=os.path.join(DATASET_ROOT, CSV_LOCATION))
+    #debug
+    print("df \n",df)
+
+    # get list of images and metadata
+    dataset_images = _list_images(ds_path=DATASET_ROOT, csv_data=df)
+    
+    #add the images to the database
 
     # for each image file, extract metadata and create a database entry
     print("\n\tAdding database entries for {} images found...".format(len(dataset_images)))
@@ -151,6 +145,7 @@ def import_dataset(apps, schema_editor):
         'new': 0,
         'dup': 0,
     }
+
     for img_ds_path in dataset_images:
 
         img_id      = _checksum(img_ds_path)
@@ -165,21 +160,22 @@ def import_dataset(apps, schema_editor):
             counters['dup'] += 1
             continue
 
-        # extract file name from image path
-        filename = os.path.basename(img_path).split('.')[0]
-        csv_entry = None
-        try:
-            csv_entry = df.loc[filename]
-            if csv_entry.shape[0] > len(CSV_FIELDS):
-                # metadata might have duplicated filenames, if so, skip them
-                print("Discarding {} entries: filename must be unique!".format(csv_entry.shape[0]))
-                continue
-        except:
+        # extract number from image filename
+        number = int(os.path.basename(img_path).split('.')[0])
+
+        #debug
+        print(number)
+        print(df['image_id'].values)
+    
+        #check if the number is in the csv file
+        if int(number) not in df['image_id'].values:
+            print("Skipping image not found in csv:\n\t{}\tSHA256: {}".format(
+                img_path, img_id))
             counters['404'] += 1
-            print("Skipping CSV filename not found: {}".format(filename))
             continue
 
         # extract values from csv entry
+        csv_entry = df.loc[df['image_id'] == number]
         image_fields = _extract_csv_to_db(
             csv_entry=csv_entry,
             csv_fields=CSV_FIELDS,
