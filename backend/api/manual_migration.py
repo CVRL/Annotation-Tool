@@ -94,16 +94,7 @@ def _extract_csv_to_db(csv_entry, csv_fields, db_fields, csv_db_map=dict()):
 
     image_fields = dict()
     for db, csv in zip(db_fields, csv_fields):
-        value = None
-        try:
-            value = csv_entry.loc[csv]
-        except:
-            #debug
-            #getting error here
-            print(csv_entry.head())
-            raise
-        if csv in csv_db_map:     # translate value
-            value = csv_db_map[csv][value]
+        value = csv_entry.iloc[0][csv]
         image_fields.update({ db: value })
 
     return image_fields
@@ -131,7 +122,7 @@ def import_dataset(apps, schema_editor):
     # load csv file
     df = _load_csv(csv_path=os.path.join(DATASET_ROOT, CSV_LOCATION))
     #debug
-    print("df \n",df)
+    print("df",df)
 
     # get list of images and metadata
     dataset_images = _list_images(ds_path=DATASET_ROOT, csv_data=df)
@@ -166,9 +157,11 @@ def import_dataset(apps, schema_editor):
         #debug
         print(number)
         print(df['image_id'].values)
+
+        image_ids = df['image_id'].tolist()
     
         #check if the number is in the csv file
-        if int(number) not in df['image_id'].values:
+        if number not in image_ids:
             print("Skipping image not found in csv:\n\t{}\tSHA256: {}".format(
                 img_path, img_id))
             counters['404'] += 1
