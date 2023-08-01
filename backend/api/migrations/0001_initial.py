@@ -21,13 +21,6 @@ class Migration(migrations.Migration):
                 ('img_id', models.CharField(max_length=100, unique=True)),
                 ('extension', models.CharField(blank=True, default='', max_length=15)),
                 ('img_path', models.CharField(max_length=200)),
-                ('user_id', models.CharField(max_length=100)),
-                ('sample_id', models.IntegerField()),
-                ('eye', models.CharField(blank=True, choices=[('L', 'Left Eye'), ('R', 'Right Eye')], max_length=1)),
-                ('lens_type', models.CharField(blank=True, choices=[('L', 'Live Lens'), ('F', 'Fake Lens'), ('C', 'Clear Lens')], max_length=1)),
-                ('nir_illumination', models.CharField(blank=True, choices=[('C', 'Cross NIR'), ('D', 'Direct NIR')], max_length=1)),
-                ('lens_brand', models.CharField(blank=True, max_length=100)),
-                ('is_regular', models.BooleanField(null=True)),
             ],
         ),
         migrations.CreateModel(

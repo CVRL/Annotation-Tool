@@ -62,11 +62,13 @@ class ImageViewSet(viewsets.ViewSet):
 
     def list(self, request):
 
+        print("Hello User {}!".format(request.user.username))
         print(" > Listing")
         MAX_ITEMS_TO_RETURN = 100
 
-        # filter and sort images by id
-        response_set = self.queryset.filter(lens_type="F")  # return only "fake" lenses
+        # filter and sort images by id        
+        #response_set = self.queryset.filter()  # return only "fake" lenses
+        response_set = self.queryset
         response_set = response_set.order_by('img_id')
 
         # exclude the images already annotated by valid (non-test) users
@@ -127,7 +129,8 @@ class AnnotationViewSet(viewsets.ViewSet):
 
     def list(self, request):
         """Returns the list of annotations."""
-
+        
+        print("Hello User {}!".format(request.user.username))
         print(" > Listing: {}".format(self.queryset.count()))
         serializer = AnnotationSerializer(self.queryset, context={'request': request}, many=True)
         return Response(serializer.data)
@@ -147,8 +150,9 @@ class AnnotationViewSet(viewsets.ViewSet):
     def create(self, request):
         """Create or update the annotation for an image."""
 
+        print("Hello User {}!".format(request.user.username))
         print("User {} posting new annotations.".format(request.user.pk))
-
+        
         failures = list()
         successes = list()
         print(len(request.data))
