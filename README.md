@@ -4,6 +4,10 @@
 
 ![](images/demo.png )
 
+## Purpose of the tool
+
+This tool allows to make free-hand image annotations, useful in tasks such as gathering ground-truth for segmentation or learning about human salient areas. was initially designed and implemented by [Lucas Parzianello](https://github.com/lucaspar) for his work on [fractional iris recognition](https://openaccess.thecvf.com/content/WACV2022W/MAP-A/papers/Parzianello_Saliency-Guided_Textured_Contact_Lens-Aware_Iris_Recognition_WACVW_2022_paper.pdf). It has been extended later to research on [iris presentation attack detection](https://ieeexplore.ieee.org/document/10122228) and [human salience-guided training](https://openaccess.thecvf.com/content/WACV2023/papers/Boyd_CYBORG_Blending_Human_Saliency_Into_the_Loss_Improves_Deep_Learning-Based_WACV_2023_paper.pdf). 
+
 ## Summary
 
 + Dockerized application for simple deployment
@@ -317,3 +321,8 @@ Below we describe how to do this part B by using a database migration:
     docker-compose exec db createdb -U eyetagger_admin eyetagger
     docker-compose exec web pipenv run /app/manage.py migrate
     ```
+## Developers and funding
+
++ Initial version: [EyeTagger](https://github.com/lucaspar/eyetagger) by Lucas Parzianello
++ Extensions and adaptations for the Trusted IA Framework: Anna VanAvermaete and [Priscila Saboia](https://github.com/psaboia)
++ This work was supported by the U.S. Department of Defense (Contract No. W52P1J2093009). The views and conclusions contained in this document are those of the authors and should not be interpreted as representing the official policies, either expressed or implied, of the U.S. Department of Defense or the U.S. Government.
