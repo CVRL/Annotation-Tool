@@ -95,6 +95,7 @@ const mutations = {
         state.annotations[id].img_id = id           // makes things simpler later
         state.annotations[id].is_dirty = true       // marks to be posted
         state.annotations[id].annotation = payload.annotation
+        state.annotations[id].textbox = payload.textbox
         console.log(Object.keys(state.annotations).length);
 
     },

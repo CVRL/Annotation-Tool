@@ -162,6 +162,7 @@ class AnnotationViewSet(viewsets.ViewSet):
             annotation, _ = Annotation.objects.get_or_create(
                 annotator=request.user,
                 image=img_instance,
+                text=ann['textbox'],
             )
             annotation.annotation = ann['annotation'] if 'annotation' in ann else ""
             try:

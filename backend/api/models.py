@@ -43,6 +43,7 @@ class Annotation(models.Model):
     annotator = models.ForeignKey('auth.User', to_field="id", related_name='annotations', on_delete=models.PROTECT)
     image = models.ForeignKey(Image, to_field="img_id", related_name='annotations', on_delete=models.PROTECT)
     annotation = models.TextField(blank=True)
+    text = models.TextField(blank=True)
 
     class Meta:
         unique_together = [["annotator", "image"]]

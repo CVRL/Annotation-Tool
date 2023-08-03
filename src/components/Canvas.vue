@@ -127,6 +127,9 @@
                         ref="main-canvas"
                     />
                 </div>
+                <div>
+                    <input v-model="text_field" />
+                </div>
                 <div class="column hidden">
                     <canvas
                         class="hidden"
@@ -154,6 +157,7 @@ export default {
             brush_size: 4,
             context: null,
             image: null,
+            text_field: 'testing',
         }
     },
     computed: {
@@ -264,6 +268,7 @@ export default {
                     const payload = {
                         img_id: this.canvas_image.img_id,
                         annotation: base64data,
+                        textbox: this.text_field,
                     }
                     this.$store.dispatch('images/setAnnotation', payload)
                     next_action && this.$store.dispatch(next_action)
