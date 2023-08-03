@@ -325,4 +325,4 @@ Below we describe how to do this part B by using a database migration:
 
 + Initial version: [EyeTagger](https://github.com/lucaspar/eyetagger) by Lucas Parzianello
 + Extensions and adaptations for the Trusted IA Framework: Anna VanAvermaete and [Priscila Saboia](https://github.com/psaboia)
-+ This work was supported by the U.S. Department of Defense (Contract No. W52P1J2093009). The views and conclusions contained in this document are those of the authors and should not be interpreted as representing the official policies, either expressed or implied, of the U.S. Department of Defense or the U.S. Government.
++ This work was partially supported by the U.S. Department of Defense (Contract No. W52P1J2093009). The views and conclusions contained in this document are those of the authors and should not be interpreted as representing the official policies, either expressed or implied, of the U.S. Department of Defense or the U.S. Government.
