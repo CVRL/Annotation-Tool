@@ -69,6 +69,7 @@ class ImageViewSet(viewsets.ViewSet):
         # filter and sort images by id        
         #response_set = self.queryset.filter()  # return only "fake" lenses
         response_set = self.queryset
+        '''
         response_set = response_set.order_by('img_id')
 
         # exclude the images already annotated by valid (non-test) users
@@ -83,7 +84,8 @@ class ImageViewSet(viewsets.ViewSet):
         ]
         response_set = response_set.exclude(img_id__in=valid_annotated_img)
         print("Remaining images: {}".format(response_set.count()))
-
+        '''
+        
         # shuffle and cap to maximum number
         response_set = sorted(response_set, key=lambda x: random.random())
         response_set = response_set[:MAX_ITEMS_TO_RETURN]
