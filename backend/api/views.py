@@ -85,7 +85,7 @@ class ImageViewSet(viewsets.ViewSet):
         response_set = response_set.exclude(img_id__in=valid_annotated_img)
         print("Remaining images: {}".format(response_set.count()))
         '''
-        
+
         # shuffle and cap to maximum number
         response_set = sorted(response_set, key=lambda x: random.random())
         response_set = response_set[:MAX_ITEMS_TO_RETURN]
@@ -165,6 +165,8 @@ class AnnotationViewSet(viewsets.ViewSet):
                 annotator=request.user,
                 image=img_instance,
                 text=ann['textbox'],
+                real_button=ann['real_button'],
+                fake_button=ann['fake_button'],
             )
             annotation.annotation = ann['annotation'] if 'annotation' in ann else ""
             try:

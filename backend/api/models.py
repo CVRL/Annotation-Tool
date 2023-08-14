@@ -44,6 +44,8 @@ class Annotation(models.Model):
     image = models.ForeignKey(Image, to_field="img_id", related_name='annotations', on_delete=models.PROTECT)
     annotation = models.TextField(blank=True)
     text = models.TextField(blank=True)
+    real_button = models.BooleanField(default=False)
+    fake_button = models.BooleanField(default=False)
 
     class Meta:
         unique_together = [["annotator", "image"]]

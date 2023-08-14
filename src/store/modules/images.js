@@ -96,6 +96,8 @@ const mutations = {
         state.annotations[id].is_dirty = true       // marks to be posted
         state.annotations[id].annotation = payload.annotation
         state.annotations[id].textbox = payload.textbox
+        state.annotations[id].real_button = payload.real_button
+        state.annotations[id].fake_button = payload.fake_button
         console.log(Object.keys(state.annotations).length);
 
     },
