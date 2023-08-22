@@ -145,6 +145,14 @@
                         <button class="button is-danger" @click="fakeButtonClicked">Fake</button>
                     </div>
                 </div>
+
+                <!--
+                    add question to top of page
+
+                -->
+                <div class="question">
+                    <h5 class="title is-5 has-text-centered">Is this image real or fake?</h5>
+                </div>
                     
                 <div class="column hidden">
                     <canvas
@@ -447,13 +455,13 @@ export default {
     display: flex;
     position: absolute;
     justify-content: center;
-    bottom: 20px;
+    bottom: -15px;
     gap: 10px;
 }
 /* position/properties of text box */
 .annotation-input {
   position: absolute;
-  bottom: -20px;
+  bottom: -60px;
   justify-content: center;
   padding: 10px;
 }
