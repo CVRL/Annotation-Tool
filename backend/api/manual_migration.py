@@ -147,11 +147,17 @@ def import_dataset(apps, schema_editor):
             print("Skipping CSV filename not found: {}".format(filename))
             continue
 
+        #print the ground_truth for each image
+        print("\n >> Ground Truth for each image:")
+        print(" >> Image: {} \n >> Ground Truth: {}".format(img_path, csv_entry['ground_truth']))
+
         # create database object
         img = Image(
             img_id      = img_id,
             extension   = extension,
             img_path    = img_path,
+            ground_truth = csv_entry['ground_truth'],
+            
         )
 
         # execute database transaction
@@ -165,6 +171,12 @@ def import_dataset(apps, schema_editor):
             raise err
 
     print("\n >> Duplicated entries:  {}".format(counters['dup']))
+    #print the ground_truth for each image
+    #print("\n >> Ground Truth for each image:")
+    '''
+    for img in Image.objects.all():
+        print(" >> Image: {} \n >> Ground Truth: {}".format(img.img_path, img.ground_truth))
+    '''
     print(" >> Entries not found:   {}".format(counters['404']))
     print(" >> Entries added:       {}".format(counters['new']))
 
