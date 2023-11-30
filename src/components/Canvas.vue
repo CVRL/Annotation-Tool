@@ -127,6 +127,33 @@
                         ref="main-canvas"
                     />
                 </div>
+                <!--    
+                    add textbox
+                -->
+                <div class="annotation-input">
+                    <input v-model="text_field" />
+                </div>
+
+                <!--    
+                    add real and fake buttons
+                -->
+                <div class="button-group">
+                    <div v-on:click="real_button">
+                        <button class="button is-success" @click="realButtonClicked">Real</button>
+                    </div>
+                    <div v-on:click="fake_button">
+                        <button class="button is-danger" @click="fakeButtonClicked">Fake</button>
+                    </div>
+                </div>
+
+                <!--
+                    add question to top of page
+
+                -->
+                <div class="question">
+                    <h5 class="title is-5 has-text-centered">Is this image real or fake?</h5>
+                </div>
+                    
                 <div class="column hidden">
                     <canvas
                         class="hidden"
@@ -154,6 +181,9 @@ export default {
             brush_size: 4,
             context: null,
             image: null,
+            text_field: 'enter text here',
+            real_button: false,
+            fake_button: false,
         }
     },
     computed: {
@@ -174,6 +204,16 @@ export default {
         },
     },
     methods: {
+
+        realButtonClicked() {
+                    this.real_button = true;
+                    this.fake_button = false;
+                },
+
+        fakeButtonClicked() {
+            this.real_button = false;
+            this.fake_button = true;
+        },
 
         canvas_brush_dec() {
             if (this.brush_size <= 1) {
@@ -264,10 +304,14 @@ export default {
                     const payload = {
                         img_id: this.canvas_image.img_id,
                         annotation: base64data,
+                        textbox: this.text_field,
+                        real_button: this.real_button,
+                        fake_button: this.fake_button,
                     }
                     this.$store.dispatch('images/setAnnotation', payload)
                     next_action && this.$store.dispatch(next_action)
                 }
+
             })
 
         },
@@ -405,6 +449,23 @@ export default {
 </script>
 
 <style>
+
+/* move real and fake buttons to be side by side and below images*/
+.button-group {
+    display: flex;
+    position: absolute;
+    justify-content: center;
+    bottom: -15px;
+    gap: 10px;
+}
+/* position/properties of text box */
+.annotation-input {
+  position: absolute;
+  bottom: -60px;
+  justify-content: center;
+  padding: 10px;
+}
+
 .image_id {
     font-family: "Courier New", Courier, monospace;
     text-align: right;

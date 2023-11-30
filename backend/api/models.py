@@ -37,15 +37,26 @@ class Image(models.Model):
     img_id              = models.CharField(max_length=100, unique=True)
     extension           = models.CharField(max_length=15, blank=True, default="")
     img_path            = models.CharField(max_length=200)
+    ground_truth        = models.TextField(blank=True, null=True)
 
 
 class Annotation(models.Model):
     annotator = models.ForeignKey('auth.User', to_field="id", related_name='annotations', on_delete=models.PROTECT)
     image = models.ForeignKey(Image, to_field="img_id", related_name='annotations', on_delete=models.PROTECT)
     annotation = models.TextField(blank=True)
+    text = models.TextField(blank=True)
+    real_button = models.BooleanField(default=False)
+    fake_button = models.BooleanField(default=False)
+    ground_truth = models.TextField(blank=True, null=True)
 
     class Meta:
         unique_together = [["annotator", "image"]]
+    
+    def save(self, *args, **kwargs):
+        # Fetch ground truth from the associated Image and set it in the Annotation
+        if not self.ground_truth and self.image:
+            self.ground_truth = self.image.ground_truth
+        super().save(*args, **kwargs)
 
 
 class MessageSerializer(serializers.HyperlinkedModelSerializer):

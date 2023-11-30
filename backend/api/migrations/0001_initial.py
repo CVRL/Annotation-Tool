@@ -38,6 +38,7 @@ class Migration(migrations.Migration):
                 ('annotation', models.TextField(blank=True)),
                 ('annotator', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='annotations', to=settings.AUTH_USER_MODEL)),
                 ('image', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='annotations', to='api.Image', to_field='img_id')),
+
             ],
             options={
                 'unique_together': {('annotator', 'image')},
