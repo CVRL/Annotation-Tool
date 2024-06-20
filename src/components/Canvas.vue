@@ -184,6 +184,7 @@ export default {
             text_field: 'enter text here',
             real_button: false,
             fake_button: false,
+            annotation_times: [],
         }
     },
     computed: {
@@ -259,6 +260,8 @@ export default {
             this.canvas.main_canvas.getObjects().map(o => {
                 this.canvas.main_canvas.remove(o)
             })
+
+            this.annotation_times = []
         },
 
         export_annotation: function (next_action) {
@@ -281,6 +284,11 @@ export default {
 
             // convert canvas to image
             this.$refs['export-canvas'].toBlob(blob => {
+
+                const exportSvg = this.canvas.export_canvas.toSVG()
+                // console.log("Exported SVG:", exportSvg);
+                const annotation_times = JSON.stringify(this.annotation_times);
+                // console.log("Annotation times:", this.annotation_times, annotation_times);
 
                 // now objects can be removed from export canvas
                 this.canvas.export_canvas.getObjects().map(o => {
@@ -307,6 +315,8 @@ export default {
                         textbox: this.text_field,
                         real_button: this.real_button,
                         fake_button: this.fake_button,
+                        annotation_svg: exportSvg,
+                        annotation_times: annotation_times,
                     }
                     this.$store.dispatch('images/setAnnotation', payload)
                     next_action && this.$store.dispatch(next_action)
@@ -388,6 +398,17 @@ export default {
 
             }
 
+            this.canvas.main_canvas.on('mouse:down', () => {
+                if(this.annotation_times.length == 0 || this.annotation_times[this.annotation_times.length - 1].up != null) {
+                    // console.log("Started Annotation")
+                    let timeDown = new Date().getTime();
+                    this.annotation_times.push({
+                        down: timeDown,
+                        up: null,
+                    });
+                }
+            });
+
             this.canvas.main_canvas.on('mouse:up', () => {
 
                 // disolve existing group
@@ -400,6 +421,11 @@ export default {
                     originX: 'center',
                     originY: 'center',
                 })
+
+                // console.log("Ended Annotation")
+                let timeUp = new Date().getTime(); 
+                this.annotation_times[this.annotation_times.length - 1].up = timeUp;
+
                 // const items = this.canvas.main_canvas.getObjects()
                 // console.log("Objects in this annotation:", items.length);
 
@@ -487,8 +513,8 @@ export default {
 }
 #main-canvas,
 #vis-canvas {
-    border-radius: 1em;
-    /* border: 1px solid black; */
+    /* border-radius: 1em; */
+    border: 1px solid black;
 }
 button,
 button > * {

@@ -169,6 +169,8 @@ class AnnotationViewSet(viewsets.ViewSet):
                 fake_button=ann['fake_button'],
             )
             annotation.annotation = ann['annotation'] if 'annotation' in ann else ""
+            annotation.annotation_svg = ann['annotation_svg'] if 'annotation_svg' in ann else ""
+            annotation.annotation_times = ann['annotation_times'] if 'annotation_times' in ann else ""
             try:
                 response = annotation.save()
                 print("New annotation stored: {} -- {} :: {}".format(

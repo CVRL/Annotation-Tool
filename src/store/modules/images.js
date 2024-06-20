@@ -98,6 +98,8 @@ const mutations = {
         state.annotations[id].textbox = payload.textbox
         state.annotations[id].real_button = payload.real_button
         state.annotations[id].fake_button = payload.fake_button
+        state.annotations[id].annotation_svg = payload.annotation_svg
+        state.annotations[id].annotation_times = payload.annotation_times
         console.log(Object.keys(state.annotations).length);
 
     },

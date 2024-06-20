@@ -48,6 +48,8 @@ class Annotation(models.Model):
     real_button = models.BooleanField(default=False)
     fake_button = models.BooleanField(default=False)
     ground_truth = models.TextField(blank=True, null=True)
+    annotation_svg = models.TextField(blank=True, null=True)
+    annotation_times = models.TextField(blank=True, null=True)
 
     class Meta:
         unique_together = [["annotator", "image"]]
