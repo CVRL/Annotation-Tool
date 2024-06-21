@@ -30,6 +30,10 @@ Before getting started you should have the following installed and running:
 
 Data upload via web interface if not possible yet, so the data needs to be mounted inside the container.
 
+Your dataset directory should contain:
++ A directory named `images` with all the image files.
++ A file named `metadata.csv` with the corresponding metadata.
+
 If you have the images in the same machine, just put them in the expected location `data/dataset/` by creating a symbolic link (below) or just moving your data.
 
 > `ln -s    $MY_DATASET_LOCATION    $(pwd)/data/dataset`
@@ -63,6 +67,7 @@ docker network create net-nginx-proxy
 docker-compose up
 
 # from another terminal, run the database migrations
+docker-compose exec web pipenv run /app/manage.py makemigrations
 docker-compose exec web pipenv run /app/manage.py migrate
 
 # create django superuser
@@ -233,7 +238,24 @@ rm      /tmp/dump.sql.gz     /tmp/dump.sql
 
 Eyetagger handles two types of data: the images - referred to as the **dataset**, and the metadata - stored in a relational **database / db** using PostgreSQL.
 
-Metadata is necessary to keep track of the annotations, who did them, when, and any other data attribute that might be useful for the annotation workload. The dataset is usually a set of images to be displayed during the annotation process.
+As described previously, the `data/dataset` expects two things: a directory `images` that contains all images in your dataset, and a file `metadata.csv` that stores information about the images in your dataset. Below is a directory tree illustrating the expected dataset setup:
+```
+data/dataset
+  ├── metadata.csv
+  └── images
+    ├── image1.png
+    ├── image2.png
+    └── ...
+```
+
+Metadata is necessary to keep track of the annotations, who did them, when, and any other data attribute that might be useful for the annotation workload. The dataset is usually a set of images to be displayed during the annotation process. Below is an example of what your `metadata.csv` file may look like:
+
+```csv
+filename,ground_truth
+image1.png,real
+image2.png,spoof
+...
+```
 
 In order to serve a custom dataset, you will need to first A. run the app creating a database (steps 1.1-1.4 above) and then B. create the metadata entries for your dataset in PostgreSQL.
 
