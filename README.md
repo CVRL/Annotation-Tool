@@ -30,13 +30,13 @@ Before getting started you should have the following installed and running:
 
 Data upload via web interface if not possible yet, so the data needs to be mounted inside the container.
 
-Your dataset directory should contain:
-+ A directory named `images` with all the image files.
-+ A file named `metadata.csv` with the corresponding metadata.
-
 If you have the images in the same machine, just put them in the expected location `data/dataset/` by creating a symbolic link (below) or just moving your data.
 
 > `ln -s    $MY_DATASET_LOCATION    $(pwd)/data/dataset`
+
+Your `data/dataset/` directory should contain:
++ A directory named `images` with all the image files.
++ A file named `metadata.csv` with the corresponding metadata.
 
 If your dataset is remote (cloud or another computer), you might want to start using `dvc`. Check the [Integrating DVC](#5.-integrating-dvc) session below.
 
@@ -238,7 +238,7 @@ rm      /tmp/dump.sql.gz     /tmp/dump.sql
 
 Eyetagger handles two types of data: the images - referred to as the **dataset**, and the metadata - stored in a relational **database / db** using PostgreSQL.
 
-As described previously, the `data/dataset` expects two things: a directory `images` that contains all images in your dataset, and a file `metadata.csv` that stores information about the images in your dataset. Below is a directory tree illustrating the expected dataset setup:
+As described previously, the `data/dataset` location expects a directory `images` that contains all images in your dataset and a file `metadata.csv` that stores information about the images in your dataset. Below is a directory tree illustrating the expected dataset setup:
 ```
 data/dataset
   ├── metadata.csv
@@ -345,7 +345,8 @@ Below we describe how to do this part B by using a database migration:
     ```
 ## Developers and funding
 
-+ Initial version: [EyeTagger](https://github.com/lucaspar/eyetagger) by Lucas Parzianello
-+ Extensions and adaptations for the Trusted IA Framework: Anna VanAvermaete and [Priscila Saboia](https://github.com/psaboia)
++ Initial version: [EyeTagger](https://github.com/lucaspar/eyetagger) by [Lucas Parzianello](https://github.com/lucaspar)
++ Extensions and adaptations for the Trusted AI Framework: [Anna VanAvermaete](https://github.com/annavan) and [Priscila Saboia](https://github.com/psaboia)
 + [Documentation from Anna VanAvermaete](https://docs.google.com/document/d/1FJHKyK3HxiTIPx96jZJee3DCR4EqUxlSOQufr7o_gj8/edit?usp=sharing)
 + The adaptations and extensions of the tool made by Priscila Saboia were supported by the U.S. Department of Defense (Contract No. W52P1J2093009). The adaptations and extensions of the tool made by Anna VanAvermaete were supported partially by the U.S. Department of Defense (Contract No. W52P1J2093009) and partially by the National Science Foundation (award No. 2237880). The views and conclusions contained in this document are those of the authors and should not be interpreted as representing the official policies, either expressed or implied, of the U.S. Department of Defense, the National Science Foundation or the U.S. Government.
++ Collection of SVG data and individual annotation times: [Samuel Webster](https://github.com/samjwebster)
